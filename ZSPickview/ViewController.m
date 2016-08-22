@@ -56,11 +56,19 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor grayColor];
+//    self.view.backgroundColor = [UIColor grayColor];
+}
+
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     ZSPickView *pick = [[ZSPickView alloc]initWithComponentArr:nil];
     pick.componentArr = @[self.arr1,self.arr2,self.arr3];
-    
+    pick.sureBlock = ^(NSArray *arr){
+        for (NSString *str in arr) {
+            NSLog(@"数%@",str);
+        }
+    };
     [self.view addSubview:pick];
+
 }
 
 - (void)didReceiveMemoryWarning {
