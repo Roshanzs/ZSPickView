@@ -13,6 +13,7 @@
 @property(nonatomic,strong)NSArray *arr1;
 @property(nonatomic,strong)NSArray *arr2;
 @property(nonatomic,strong)NSArray *arr3;
+@property(nonatomic,strong)NSArray *arr4;
 
 @end
 
@@ -54,26 +55,56 @@
     return _arr3;
 }
 
+-(NSArray *)arr4{
+    if (_arr4 == nil) {
+        _arr4 = [NSArray arrayWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"city.plist" ofType:nil]];
+    }
+    return _arr4;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    self.view.backgroundColor = [UIColor grayColor];
 }
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    [self norelationPickView];
+//    [self relationPickView];
+}
+
+//无联动的pickview
+-(void)norelationPickView{
     ZSPickView *pick = [[ZSPickView alloc]initWithComponentArr:nil];
-    pick.componentArr = @[self.arr1,self.arr2,self.arr3];
+    pick.componentArr = @[self.arr1,self.arr2];
     pick.sureBlock = ^(NSArray *arr){
         for (NSString *str in arr) {
-            NSLog(@"数%@",str);
+            NSLog(@"无联动   %@",str);
+        }
+    };
+    [self.view addSubview:pick];
+}
+
+//联动的pickview
+-(void)relationPickView{
+    ZSPickView *pick = [[ZSPickView alloc]initWithRelationComponentArr:self.arr4 withRight:@"cities" withLeft:@"state"];
+    pick.sureBlock = ^(NSArray *arr){
+        for (NSString *str in arr) {
+            NSLog(@"联动   %@",str);
         }
     };
     [self.view addSubview:pick];
 
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+
+
+
+
+
+
+
+
+
+
+
 
 @end

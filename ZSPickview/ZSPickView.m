@@ -20,6 +20,11 @@
 @property(nonatomic,strong)NSString *oneStr;
 @property(nonatomic,strong)NSString *twoStr;
 @property(nonatomic,strong)NSString *threeStr;
+@property(nonatomic,assign)BOOL isrelation;
+@property(nonatomic,strong)NSArray *relationComponentArr;
+@property(nonatomic,strong)NSString *rightIndefile;
+@property(nonatomic,strong)NSString *leftIndefile;
+
 
 @end
 @implementation ZSPickView
@@ -30,12 +35,21 @@
     self = [super init];
     if (self) {
         self.componentArr = Arr;
-        self.backgroundColor = [UIColor grayColor];
         [self setupUI];
     }
     return self;
 }
 
+-(instancetype)initWithRelationComponentArr:(NSArray *)Arr withRight:(NSString *)rightStr withLeft:(NSString *)leftStr{
+    self = [super init];
+    if (self) {
+        self.rightIndefile = rightStr;
+        self.leftIndefile = leftStr;
+        self.relationComponentArr = Arr;
+        [self setupUI];
+    }
+    return self;
+}
 
 
 -(UIPickerView *)pickview{
@@ -71,6 +85,14 @@
     [self.pickview reloadAllComponents];
 }
 
+-(void)setRelationComponentArr:(NSArray *)relationComponentArr{
+    _relationComponentArr = relationComponentArr;
+    self.isNum = 2;
+    self.isrelation = YES;
+    self.oneArr = relationComponentArr;
+    self.twoArr = self.oneArr[0][self.rightIndefile];
+}
+
 -(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView{
     if (self.isNum) {
         return self.isNum;
@@ -99,7 +121,11 @@
 -(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component{
     if (self.isNum) {
         if (component == 0) {
-            return [NSString stringWithFormat:@"%@",self.oneArr[row]];
+            if (self.isrelation) {
+                return [NSString stringWithFormat:@"%@",self.oneArr[row][self.leftIndefile]];
+            }else{
+                return [NSString stringWithFormat:@"%@",self.oneArr[row]];
+             }
         }
         if (component == 1) {
             return [NSString stringWithFormat:@"%@",self.twoArr[row]];
@@ -116,7 +142,13 @@
 -(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component{
     if (self.isNum) {
         if (component == 0) {
-            self.oneStr = self.oneArr[row];
+            if (self.isrelation) {
+                self.twoArr = self.oneArr[row][self.rightIndefile];
+                [self.pickview reloadComponent:1];
+                self.oneStr = self.oneArr[row][self.leftIndefile];
+            }else{
+              self.oneStr = self.oneArr[row];  
+            }
         }
         if (component == 1) {
             self.twoStr = self.twoArr[row];
@@ -153,7 +185,27 @@
 -(NSArray *)sureArr{
     if (_sureArr == nil) {
         _sureArr = [NSArray array];
-        _sureArr = @[self.oneStr,self.twoStr,self.threeStr];
+        if (self.oneStr == nil) {
+            self.oneStr = self.oneArr[0];
+            if (self.isrelation) {
+                self.oneStr = self.oneArr[0][self.leftIndefile];
+            }
+        }
+        if (self.twoStr == nil) {
+            self.twoStr = self.twoArr[0];
+        }
+        if (self.threeStr == nil) {
+            self.threeStr = self.threeArr[0];
+        }
+        if (self.isNum == 1) {
+            _sureArr = @[self.oneStr];
+        }
+        if (self.isNum == 2) {
+            _sureArr = @[self.oneStr,self.twoStr];
+        }
+        if (self.isNum == 3) {
+            _sureArr = @[self.oneStr,self.twoStr,self.threeStr];
+        }
     }
     return _sureArr;
 }

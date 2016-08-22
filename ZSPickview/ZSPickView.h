@@ -9,11 +9,11 @@
 #import <UIKit/UIKit.h>
 
 @interface ZSPickView : UIView
+//pickview无关联的组数
 @property(nonatomic,strong)NSArray *componentArr;
-//pickview的组数
 -(instancetype)initWithComponentArr:(NSArray *)Arr;
+//pickview联动的数组
+-(instancetype)initWithRelationComponentArr:(NSArray *)Arr withRight:(NSString *)rightStr withLeft:(NSString *)leftStr;
 //确认回调block
 @property(nonatomic,copy)void(^sureBlock)(NSArray *);
-//取消回调block
-@property(nonatomic,copy)void(^cancelBlock)();
 @end
