@@ -67,14 +67,14 @@
 }
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-//    [self norelationPickView];
-    [self relationPickView];
+    [self norelationPickView];
+//    [self relationPickView];
 }
 
 //无联动的pickview
 -(void)norelationPickView{
     ZSPickView *pick = [[ZSPickView alloc]initWithComponentArr:nil];
-    pick.componentArr = @[self.arr1,self.arr2];
+    pick.componentArr = @[self.arr1];
     pick.sureBlock = ^(NSArray *arr){
         for (NSString *str in arr) {
             NSLog(@"无联动   %@",str);
