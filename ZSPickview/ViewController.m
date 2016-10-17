@@ -67,8 +67,8 @@
 }
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    [self norelationPickView];
-//    [self relationPickView];
+//    [self norelationPickView];
+    [self relationPickView];
 }
 
 //无联动的pickview
